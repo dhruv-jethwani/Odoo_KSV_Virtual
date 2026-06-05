@@ -76,7 +76,11 @@ function Login() {
 			showToast(response.data.message, 'success')
 			setForm(initialForm)
 			setShowPassword(false)
-			// window.location.hash = '#dashboard' // Redirect if needed
+			
+			// Store the JWT and redirect
+			localStorage.setItem('token', response.data.token)
+			setTimeout(() => { window.location.hash = '#home' }, 1000)
+
 		} catch (error) {
 			const errorMsg = error.response?.data?.error || 'An error occurred during login'
 			showToast(errorMsg, 'error')

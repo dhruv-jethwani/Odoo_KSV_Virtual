@@ -110,6 +110,11 @@ function Register() {
 		fontWeight: isValid ? '700' : ''
 	})
 
+	// Calculate password strength progress
+	const reqCount = (reqs.length ? 1 : 0) + (reqs.upper ? 1 : 0) + (reqs.number ? 1 : 0)
+	const progressPercentage = (reqCount / 3) * 100
+	const isPasswordValid = reqCount === 3
+
 	return (
 		<main className="login-shell">
 			<Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: '' })} />
@@ -196,6 +201,16 @@ function Register() {
 							</button>
 						</div>
 						{errors.password ? <small>{errors.password}</small> : null}
+						
+						{/* Rainbow Progress Bar */}
+						<div style={{ height: '6px', background: 'rgba(148, 163, 184, 0.2)', borderRadius: '999px', marginTop: '6px', overflow: 'hidden' }}>
+							<div style={{
+								height: '100%',
+								width: `${progressPercentage}%`,
+								background: 'linear-gradient(90deg, #ef4444 0%, #eab308 50%, #10b981 100%)',
+								transition: 'width 0.4s cubic-bezier(0.22, 1, 0.36, 1)'
+							}}></div>
+						</div>
 					</label>
 
 					<div className="password-guidelines">
@@ -206,7 +221,12 @@ function Register() {
 						</ul>
 					</div>
 
-					<button className="login-button" type="submit" disabled={isSubmitting}>
+					<button 
+						className="login-button" 
+						type="submit" 
+						disabled={isSubmitting || !isPasswordValid}
+						style={{ opacity: (!isPasswordValid && !isSubmitting) ? 0.6 : 1, cursor: !isPasswordValid ? 'not-allowed' : 'pointer' }}
+					>
 						{isSubmitting ? 'Creating account...' : 'Create Account'}
 					</button>
 

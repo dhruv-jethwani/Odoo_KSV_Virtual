@@ -1,3 +1,6 @@
+import os
+import datetime
+import jwt
 from flask import request, jsonify
 from models import db
 from models.user import User
@@ -44,11 +47,18 @@ def login():
 
     user = User.query.filter_by(username=username).first()
 
-    # Generic error message for both wrong user and wrong password (security best practice)
     if not user or not user.check_password(password):
         return jsonify({"error": "Invalid username or password"}), 401
 
+    # Generate the JWT Token
+    token_expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=24)
+    token = jwt.encode({
+        'user_id': user.id,
+        'exp': token_expiration
+    }, os.getenv('JWT_SECRET', 'fallback_secret'), algorithm='HS256')
+
     return jsonify({
         "message": f"Welcome back, {user.username}!",
-        "user": user.to_dict()
+        "user": user.to_dict(),
+        "token": token
     }), 200
