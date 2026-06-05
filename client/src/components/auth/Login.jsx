@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { z } from 'zod'
+import axios from 'axios'
 import '../../App.css'
 
 const loginSchema = z.object({
-	username: z.string().min(3, 'Username must be at least 3 characters long'),
-	password: z.string().min(6, 'Password must be at least 6 characters long'),
+	username: z.string().min(1, 'Username is required'),
+	password: z.string().min(1, 'Password is required'),
 })
 
 const initialForm = {
@@ -12,45 +13,57 @@ const initialForm = {
 	password: '',
 }
 
+// Simple Toast component that doesn't rely on external CSS
+const Toast = ({ message, type, onClose }) => {
+	useEffect(() => {
+		if (message) {
+			const timer = setTimeout(() => onClose(), 3000)
+			return () => clearTimeout(timer)
+		}
+	}, [message, onClose])
+
+	if (!message) return null
+
+	return (
+		<div style={{
+			position: 'fixed', top: '24px', left: '50%', transform: 'translateX(-50%)',
+			backgroundColor: type === 'success' ? '#10b981' : '#ef4444', color: 'white',
+			padding: '12px 24px', borderRadius: '12px', zIndex: 1000, fontWeight: '600',
+			boxShadow: '0 10px 25px rgba(0,0,0,0.1)', transition: 'all 0.3s ease'
+		}}>
+			{message}
+		</div>
+	)
+}
+
 function Login() {
 	const [form, setForm] = useState(initialForm)
 	const [errors, setErrors] = useState({})
-	const [message, setMessage] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)
+	const [toast, setToast] = useState({ message: '', type: '' })
+
+	const showToast = (message, type) => setToast({ message, type })
 
 	const handleChange = (event) => {
 		const { name, value } = event.target
-
-		setForm((currentForm) => ({
-			...currentForm,
-			[name]: value,
-		}))
-
-		if (errors[name]) {
-			setErrors((currentErrors) => ({
-				...currentErrors,
-				[name]: '',
-			}))
-		}
+		setForm((currentForm) => ({ ...currentForm, [name]: value }))
+		if (errors[name]) setErrors((currentErrors) => ({ ...currentErrors, [name]: '' }))
 	}
 
 	const handleSubmit = async (event) => {
 		event.preventDefault()
-		setMessage('')
 
 		const result = loginSchema.safeParse(form)
 
 		if (!result.success) {
 			const nextErrors = {}
-
 			for (const issue of result.error.issues) {
 				const fieldName = issue.path[0]
 				if (typeof fieldName === 'string' && !nextErrors[fieldName]) {
 					nextErrors[fieldName] = issue.message
 				}
 			}
-
 			setErrors(nextErrors)
 			return
 		}
@@ -58,16 +71,24 @@ function Login() {
 		setErrors({})
 		setIsSubmitting(true)
 
-		await new Promise((resolve) => setTimeout(resolve, 900))
-
-		setIsSubmitting(false)
-		setMessage(`Welcome back, ${result.data.username}.`)
-		setForm(initialForm)
-		setShowPassword(false)
+		try {
+			const response = await axios.post('http://127.0.0.1:5000/api/auth/login', form)
+			showToast(response.data.message, 'success')
+			setForm(initialForm)
+			setShowPassword(false)
+			// window.location.hash = '#dashboard' // Redirect if needed
+		} catch (error) {
+			const errorMsg = error.response?.data?.error || 'An error occurred during login'
+			showToast(errorMsg, 'error')
+		} finally {
+			setIsSubmitting(false)
+		}
 	}
 
 	return (
 		<main className="login-shell">
+			<Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: '' })} />
+			
 			<section className="login-card">
 				<div className="login-hero">
 					<h1>Login</h1>
@@ -84,6 +105,7 @@ function Login() {
 							onChange={handleChange}
 							placeholder="Enter your username"
 							autoComplete="username"
+							style={errors.username ? { borderColor: '#dc2626' } : {}}
 						/>
 						{errors.username ? <small>{errors.username}</small> : null}
 					</label>
@@ -98,6 +120,7 @@ function Login() {
 								onChange={handleChange}
 								placeholder="••••••••"
 								autoComplete="current-password"
+								style={errors.password ? { borderColor: '#dc2626' } : {}}
 							/>
 							<button
 								type="button"
@@ -127,8 +150,6 @@ function Login() {
 					<p className="signup-text">
 						Don&apos;t have an account? <a href="#signup">Signup</a>
 					</p>
-
-					{message ? <p className="login-message">{message}</p> : null}
 				</form>
 			</section>
 		</main>

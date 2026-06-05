@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { z } from 'zod'
+import axios from 'axios'
 import '../../App.css'
 
 const registerSchema = z.object({
@@ -20,45 +21,68 @@ const initialForm = {
 	password: '',
 }
 
+// Simple Toast component
+const Toast = ({ message, type, onClose }) => {
+	useEffect(() => {
+		if (message) {
+			const timer = setTimeout(() => onClose(), 3000)
+			return () => clearTimeout(timer)
+		}
+	}, [message, onClose])
+
+	if (!message) return null
+
+	return (
+		<div style={{
+			position: 'fixed', top: '24px', left: '50%', transform: 'translateX(-50%)',
+			backgroundColor: type === 'success' ? '#10b981' : '#ef4444', color: 'white',
+			padding: '12px 24px', borderRadius: '12px', zIndex: 1000, fontWeight: '600',
+			boxShadow: '0 10px 25px rgba(0,0,0,0.1)', transition: 'all 0.3s ease'
+		}}>
+			{message}
+		</div>
+	)
+}
+
 function Register() {
 	const [form, setForm] = useState(initialForm)
 	const [errors, setErrors] = useState({})
-	const [message, setMessage] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)
+	const [toast, setToast] = useState({ message: '', type: '' })
+	
+	// Dynamic requirement checker state
+	const [reqs, setReqs] = useState({ length: false, upper: false, number: false })
+
+	useEffect(() => {
+		setReqs({
+			length: form.password.length >= 8,
+			upper: /[A-Z]/.test(form.password),
+			number: /[0-9]/.test(form.password)
+		})
+	}, [form.password])
+
+	const showToast = (message, type) => setToast({ message, type })
 
 	const handleChange = (event) => {
 		const { name, value } = event.target
-
-		setForm((currentForm) => ({
-			...currentForm,
-			[name]: value,
-		}))
-
-		if (errors[name]) {
-			setErrors((currentErrors) => ({
-				...currentErrors,
-				[name]: '',
-			}))
-		}
+		setForm((currentForm) => ({ ...currentForm, [name]: value }))
+		if (errors[name]) setErrors((currentErrors) => ({ ...currentErrors, [name]: '' }))
 	}
 
 	const handleSubmit = async (event) => {
 		event.preventDefault()
-		setMessage('')
 
 		const result = registerSchema.safeParse(form)
 
 		if (!result.success) {
 			const nextErrors = {}
-
 			for (const issue of result.error.issues) {
 				const fieldName = issue.path[0]
 				if (typeof fieldName === 'string' && !nextErrors[fieldName]) {
 					nextErrors[fieldName] = issue.message
 				}
 			}
-
 			setErrors(nextErrors)
 			return
 		}
@@ -66,16 +90,30 @@ function Register() {
 		setErrors({})
 		setIsSubmitting(true)
 
-		await new Promise((resolve) => setTimeout(resolve, 900))
-
-		setIsSubmitting(false)
-		setMessage(`Account created for ${result.data.fullName}.`)
-		setForm(initialForm)
-		setShowPassword(false)
+		try {
+			const response = await axios.post('http://127.0.0.1:5000/api/auth/register', form)
+			showToast(response.data.message, 'success')
+			setForm(initialForm)
+			setShowPassword(false)
+			setTimeout(() => { window.location.hash = '#login' }, 2000)
+		} catch (error) {
+			const errorMsg = error.response?.data?.error || 'Registration failed'
+			showToast(errorMsg, 'error')
+		} finally {
+			setIsSubmitting(false)
+		}
 	}
+
+	// Helper styling for dynamic checklist
+	const getReqStyle = (isValid) => ({
+		color: isValid ? '#10b981' : '', 
+		fontWeight: isValid ? '700' : ''
+	})
 
 	return (
 		<main className="login-shell">
+			<Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: '' })} />
+
 			<section className="login-card register-card">
 				<div className="login-hero">
 					<h1>Register</h1>
@@ -93,6 +131,7 @@ function Register() {
 								onChange={handleChange}
 								placeholder="Enter your full name"
 								autoComplete="name"
+								style={errors.fullName ? { borderColor: '#dc2626' } : {}}
 							/>
 							{errors.fullName ? <small>{errors.fullName}</small> : null}
 						</label>
@@ -106,6 +145,7 @@ function Register() {
 								onChange={handleChange}
 								placeholder="Enter a username"
 								autoComplete="username"
+								style={errors.username ? { borderColor: '#dc2626' } : {}}
 							/>
 							{errors.username ? <small>{errors.username}</small> : null}
 						</label>
@@ -120,6 +160,7 @@ function Register() {
 							onChange={handleChange}
 							placeholder="Enter your email address"
 							autoComplete="email"
+							style={errors.email ? { borderColor: '#dc2626' } : {}}
 						/>
 						{errors.email ? <small>{errors.email}</small> : null}
 					</label>
@@ -134,6 +175,7 @@ function Register() {
 								onChange={handleChange}
 								placeholder="••••••••"
 								autoComplete="new-password"
+								style={errors.password ? { borderColor: '#dc2626' } : {}}
 							/>
 							<button
 								type="button"
@@ -158,9 +200,9 @@ function Register() {
 
 					<div className="password-guidelines">
 						<ul>
-							<li>8+ Characters</li>
-							<li>Uppercase</li>
-							<li>One Number</li>
+							<li style={getReqStyle(reqs.length)}>8+ Characters</li>
+							<li style={getReqStyle(reqs.upper)}>Uppercase</li>
+							<li style={getReqStyle(reqs.number)}>One Number</li>
 						</ul>
 					</div>
 
@@ -171,8 +213,6 @@ function Register() {
 					<p className="signup-text">
 						Already have an account? <a href="#login">Log in</a>
 					</p>
-
-					{message ? <p className="login-message">{message}</p> : null}
 				</form>
 			</section>
 		</main>
