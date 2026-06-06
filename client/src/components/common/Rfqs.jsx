@@ -26,8 +26,8 @@ export default function Rfqs() {
     const fetchRfqsAndVendors = async () => {
         try {
             const [rfqRes, vendorRes] = await Promise.all([
-                axios.get('http://127.0.0.1:5000/api/rfq/'),
-                axios.get('http://127.0.0.1:5000/api/vendor/')
+                axios.get('/api/rfq/'),
+                axios.get('/api/vendor/')
             ])
             setRfqs(rfqRes.data)
             setVendors(vendorRes.data.filter(v => v.complianceStatus === 'Active'))
@@ -45,7 +45,7 @@ export default function Rfqs() {
         setIsSubmitting(true)
 
         try {
-            await axios.post('http://127.0.0.1:5000/api/rfq/add', newRfq)
+            await axios.post('/api/rfq/add', newRfq)
             fetchRfqsAndVendors()
             setView('list')
             setNewRfq({ title: '', category: '', deadline: '', description: '', itemName: '', quantity: '', invitedVendors: [] })
@@ -71,7 +71,7 @@ export default function Rfqs() {
         setQuotesModalOpen(true)
         setLoadingQuotes(true)
         try {
-            const res = await axios.get('http://127.0.0.1:5000/api/bid/')
+            const res = await axios.get('/api/bid/')
             // Filter quotes that match this specific RFQ
             const related = res.data.filter(b => b.rfq_id === rfqId)
             setSelectedRfqQuotes(related)

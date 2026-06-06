@@ -12,7 +12,7 @@ export default function Reports() {
 
     const fetchReports = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:5000/api/report/')
+            const response = await axios.get('/api/report/')
             setReportData(response.data)
         } catch (error) {
             console.error("Error fetching reports:", error)

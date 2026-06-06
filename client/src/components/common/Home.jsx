@@ -31,17 +31,17 @@ export default function Home() {
         const fetchDashboardData = async () => {
             try {
                 // 1. Fetch Current Logged-in User
-                const userRes = await axios.get('http://127.0.0.1:5000/api/auth/me', {
+                const userRes = await axios.get('/api/auth/me', {
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 setCurrentUser(userRes.data)
 
                 // 2. Fetch High-Level Reports/Stats
-                const statsRes = await axios.get('http://127.0.0.1:5000/api/report/')
+                const statsRes = await axios.get('/api/report/')
                 setDashboardStats(statsRes.data)
 
                 // 3. Fetch Recent Purchase Orders (Take top 4)
-                const poRes = await axios.get('http://127.0.0.1:5000/api/po/')
+                const poRes = await axios.get('/api/po/')
                 setRecentPOs(poRes.data.slice(0, 4))
 
             } catch (error) {

@@ -12,7 +12,7 @@ export default function Approvals() {
     // Fetch live pending approvals from backend
     const fetchApprovals = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:5000/api/approval/')
+            const response = await axios.get('/api/approval/')
             setApprovals(response.data)
         } catch (error) {
             console.error("Error fetching approvals:", error)
@@ -40,7 +40,7 @@ export default function Approvals() {
         setIsSubmitting(true)
 
         try {
-            const response = await axios.post(`http://127.0.0.1:5000/api/approval/${selectedApproval.bid_id}/action`, {
+            const response = await axios.post(`/api/approval/${selectedApproval.bid_id}/action`, {
                 action: actionType,
                 remarks: remarks
             })

@@ -9,10 +9,10 @@ export default function Activity() {
     const fetchActivities = async () => {
         try {
             // First, optionally seed the DB if it's empty so you have immediate demo data
-            await axios.post('http://127.0.0.1:5000/api/activity/seed').catch(() => {});
+            await axios.post('/api/activity/seed').catch(() => {});
             
             // Fetch live data
-            const response = await axios.get('http://127.0.0.1:5000/api/activity/')
+            const response = await axios.get('/api/activity/')
             setActivities(response.data)
         } catch (error) {
             console.error("Error fetching activities:", error)

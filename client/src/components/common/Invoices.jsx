@@ -11,7 +11,7 @@ export default function Invoices() {
 
     const fetchInvoices = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:5000/api/invoice/')
+            const response = await axios.get('/api/invoice/')
             setInvoices(response.data)
         } catch (error) {
             console.error("Error fetching invoices:", error)
@@ -30,7 +30,7 @@ export default function Invoices() {
     const handleMarkAsPaid = async () => {
         setIsProcessing(true)
         try {
-            const response = await axios.patch(`http://127.0.0.1:5000/api/invoice/${selectedInvoice.raw_id}/pay`)
+            const response = await axios.patch(`/api/invoice/${selectedInvoice.raw_id}/pay`)
             alert(response.data.message)
             fetchInvoices() 
             setView('list')
@@ -44,7 +44,7 @@ export default function Invoices() {
     const handleSendEmail = async () => {
         setIsEmailing(true)
         try {
-            const response = await axios.post(`http://127.0.0.1:5000/api/invoice/${selectedInvoice.raw_id}/email`)
+            const response = await axios.post(`/api/invoice/${selectedInvoice.raw_id}/email`)
             alert(response.data.message)
         } catch (error) {
             alert(error.response?.data?.error || "Failed to send email. Make sure SMTP variables are set in .env")

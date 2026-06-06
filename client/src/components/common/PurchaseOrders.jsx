@@ -11,7 +11,7 @@ export default function PurchaseOrders() {
     // Fetch live POs from backend
     const fetchPOs = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:5000/api/po/')
+            const response = await axios.get('/api/po/')
             setPurchaseOrders(response.data)
         } catch (error) {
             console.error("Error fetching POs:", error)
@@ -30,7 +30,7 @@ export default function PurchaseOrders() {
     const handleGenerateInvoice = async () => {
         setIsGenerating(true)
         try {
-            const response = await axios.post(`http://127.0.0.1:5000/api/po/${selectedPO.raw_id}/invoice`)
+            const response = await axios.post(`/api/po/${selectedPO.raw_id}/invoice`)
             alert(response.data.message)
             fetchPOs() // Refresh the list
             setView('list')

@@ -72,7 +72,7 @@ function Login() {
 		setIsSubmitting(true)
 
 		try {
-			const response = await axios.post('http://127.0.0.1:5000/api/auth/login', form)
+			const response = await axios.post('/api/auth/login', form)
 			showToast(response.data.message, 'success')
 			setForm(initialForm)
 			setShowPassword(false)
