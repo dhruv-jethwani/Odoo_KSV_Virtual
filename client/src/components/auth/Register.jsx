@@ -4,9 +4,15 @@ import axios from 'axios'
 import '../../App.css'
 
 const registerSchema = z.object({
-	fullName: z.string().min(3, 'Full name must be at least 3 characters long'),
-	username: z.string().min(3, 'Username must be at least 3 characters long'),
+	firstName: z.string().min(3, 'First name must be at least 3 characters long'),
+	lastName: z.string().min(1, 'Last name is required'),
+	username: z.string().min(3, 'Username must be at least 3 characters'),
 	email: z.string().email('Please enter a valid email address'),
+	phone: z.string().min(7, 'Phone number is required'),
+	role: z.enum(['Vendor', 'Procurement Officer', 'Manager', 'Admin'], {
+		required_error: 'Please select a role',
+	}),
+	country: z.string().min(2, 'Country is required'),
 	password: z
 		.string()
 		.min(8, 'Password must be at least 8 characters long')
@@ -15,17 +21,20 @@ const registerSchema = z.object({
 })
 
 const initialForm = {
-	fullName: '',
+	firstName: '',
+	lastName: '',
 	username: '',
 	email: '',
+	phone: '',
+	role: '',
+	country: '',
 	password: '',
 }
 
-// Simple Toast component
 const Toast = ({ message, type, onClose }) => {
 	useEffect(() => {
 		if (message) {
-			const timer = setTimeout(() => onClose(), 3000)
+			const timer = setTimeout(() => onClose(), 4000)
 			return () => clearTimeout(timer)
 		}
 	}, [message, onClose])
@@ -51,7 +60,6 @@ function Register() {
 	const [showPassword, setShowPassword] = useState(false)
 	const [toast, setToast] = useState({ message: '', type: '' })
 	
-	// Dynamic requirement checker state
 	const [reqs, setReqs] = useState({ length: false, upper: false, number: false })
 
 	useEffect(() => {
@@ -95,7 +103,7 @@ function Register() {
 			showToast(response.data.message, 'success')
 			setForm(initialForm)
 			setShowPassword(false)
-			setTimeout(() => { window.location.hash = '#login' }, 2000)
+			setTimeout(() => { window.location.hash = '#login' }, 3500)
 		} catch (error) {
 			const errorMsg = error.response?.data?.error || 'Registration failed'
 			showToast(errorMsg, 'error')
@@ -104,13 +112,11 @@ function Register() {
 		}
 	}
 
-	// Helper styling for dynamic checklist
 	const getReqStyle = (isValid) => ({
 		color: isValid ? '#10b981' : '', 
 		fontWeight: isValid ? '700' : ''
 	})
 
-	// Calculate password strength progress
 	const reqCount = (reqs.length ? 1 : 0) + (reqs.upper ? 1 : 0) + (reqs.number ? 1 : 0)
 	const progressPercentage = (reqCount / 3) * 100
 	const isPasswordValid = reqCount === 3
@@ -121,6 +127,9 @@ function Register() {
 
 			<section className="login-card register-card">
 				<div className="login-hero">
+					<div className="login-logo">
+						<img src="/Logo.PNG" alt="VendorBridge Logo" />
+					</div>
 					<h1>Register</h1>
 					<span>Create your account in a few simple steps.</span>
 				</div>
@@ -128,46 +137,108 @@ function Register() {
 				<form className="login-form register-form" onSubmit={handleSubmit} noValidate>
 					<div className="register-row">
 						<label className="field">
-							<p align="left">Full name</p>
+							<p align="left">First name</p>
 							<input
 								type="text"
-								name="fullName"
-								value={form.fullName}
+								name="firstName"
+								value={form.firstName}
 								onChange={handleChange}
-								placeholder="Enter your full name"
-								autoComplete="name"
-								style={errors.fullName ? { borderColor: '#dc2626' } : {}}
+								placeholder="Enter your first name"
+								autoComplete="given-name"
+								style={errors.firstName ? { borderColor: '#dc2626' } : {}}
 							/>
-							{errors.fullName ? <small>{errors.fullName}</small> : null}
+							{errors.firstName ? <small>{errors.firstName}</small> : null}
 						</label>
 
 						<label className="field">
-							<p align="left">Username</p>
+							<p align="left">Last name</p>
 							<input
 								type="text"
-								name="username"
-								value={form.username}
+								name="lastName"
+								value={form.lastName}
 								onChange={handleChange}
-								placeholder="Enter a username"
-								autoComplete="username"
-								style={errors.username ? { borderColor: '#dc2626' } : {}}
+								placeholder="Enter your last name"
+								autoComplete="family-name"
+								style={errors.lastName ? { borderColor: '#dc2626' } : {}}
 							/>
-							{errors.username ? <small>{errors.username}</small> : null}
+							{errors.lastName ? <small>{errors.lastName}</small> : null}
+						</label>
+					</div>
+
+					<div className="register-row">
+						<label className="field">
+							<p align="left">Email address</p>
+							<input
+								type="email"
+								name="email"
+								value={form.email}
+								onChange={handleChange}
+								placeholder="Enter your email address"
+								autoComplete="email"
+								style={errors.email ? { borderColor: '#dc2626' } : {}}
+							/>
+							{errors.email ? <small>{errors.email}</small> : null}
+						</label>
+
+						<label className="field">
+							<p align="left">Phone number</p>
+							<input
+								type="tel"
+								name="phone"
+								value={form.phone}
+								onChange={handleChange}
+								placeholder="Enter your phone number"
+								autoComplete="tel"
+								style={errors.phone ? { borderColor: '#dc2626' } : {}}
+							/>
+							{errors.phone ? <small>{errors.phone}</small> : null}
+						</label>
+					</div>
+
+					<div className="register-row">
+						<label className="field">
+							<p align="left">Role</p>
+							<select
+								name="role"
+								value={form.role}
+								onChange={handleChange}
+								style={errors.role ? { borderColor: '#dc2626' } : {}}
+							>
+								<option value="">Select a role</option>
+								<option value="Procurement Officer">Procurement Officer</option>
+								<option value="Manager">Manager</option>
+								<option value="Admin">Admin</option>
+							</select>
+							{errors.role ? <small>{errors.role}</small> : null}
+						</label>
+
+						<label className="field">
+							<p align="left">Country</p>
+							<input
+								type="text"
+								name="country"
+								value={form.country}
+								onChange={handleChange}
+								placeholder="Enter your country"
+								autoComplete="country-name"
+								style={errors.country ? { borderColor: '#dc2626' } : {}}
+							/>
+							{errors.country ? <small>{errors.country}</small> : null}
 						</label>
 					</div>
 
 					<label className="field">
-						<p align="left">Email address</p>
+						<p align="left">Username</p>
 						<input
-							type="email"
-							name="email"
-							value={form.email}
+							type="text"
+							name="username"
+							value={form.username}
 							onChange={handleChange}
-							placeholder="Enter your email address"
-							autoComplete="email"
-							style={errors.email ? { borderColor: '#dc2626' } : {}}
+							placeholder="Create a unique username"
+							autoComplete="username"
+							style={errors.username ? { borderColor: '#dc2626' } : {}}
 						/>
-						{errors.email ? <small>{errors.email}</small> : null}
+						{errors.username ? <small>{errors.username}</small> : null}
 					</label>
 
 					<label className="field">
@@ -202,7 +273,6 @@ function Register() {
 						</div>
 						{errors.password ? <small>{errors.password}</small> : null}
 						
-						{/* Rainbow Progress Bar */}
 						<div style={{ height: '6px', background: 'rgba(148, 163, 184, 0.2)', borderRadius: '999px', marginTop: '6px', overflow: 'hidden' }}>
 							<div style={{
 								height: '100%',
