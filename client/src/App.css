@@ -2376,39 +2376,71 @@ tr:hover td {
    DASHBOARD REFINEMENTS & AVATAR (SCREEN 3)
    ========================================= */
 
-/* Top Right User Profile Corner */
-/* --- Fancy Sidebar Profile --- */
+/* --- Premium Sidebar Profile --- */
 .sidebar-profile {
-  padding: 16px;
-  margin: 0 16px 16px 16px;
-  border-radius: 16px;
-  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-  border: 1px solid rgba(15, 23, 42, 0.06);
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.03);
+  padding: 14px 16px;
+  margin: 0 16px 24px 16px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #f8fafc 0%, #eff6ff 100%);
+  border: 1px solid #ffffff;
+  box-shadow: 
+    0 10px 25px rgba(37, 99, 235, 0.08), 
+    inset 0 2px 4px rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: center;
   gap: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.sidebar-profile:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 14px 30px rgba(37, 99, 235, 0.12), 
+    inset 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+/* Subtle accent glow inside the top right of the card */
+.sidebar-profile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(20%, -20%);
+  pointer-events: none;
 }
 
 .sidebar-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #2563eb 0%, #0f172a 100%);
-  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%; /* Perfect circle */
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
+  box-shadow: 
+    0 8px 16px rgba(37, 99, 235, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  border: 2px solid #ffffff;
   flex-shrink: 0;
+  z-index: 1;
 }
 
 .sidebar-user-meta {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  z-index: 1;
+  width: 100%;
 }
 
 .sidebar-user-name {
@@ -2418,15 +2450,26 @@ tr:hover td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.2;
 }
 
 .sidebar-user-role {
-  color: #3b82f6;
-  font-size: 0.7rem;
+  color: #2563eb;
+  font-size: 0.65rem; /* Shrunk slightly to prevent wrapping */
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   font-weight: 800;
-  margin-top: 2px;
+  margin-top: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  /* Turns the text into a clean little badge */
+  background: rgba(37, 99, 235, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .user-meta {
