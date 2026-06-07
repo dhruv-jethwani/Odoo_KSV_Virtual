@@ -232,6 +232,9 @@ export default function Home() {
                         <span className="user-name">{currentUser?.username}</span>
                         <span className="user-role">{currentUser?.role}</span>
                     </div>
+                    <div className="user-avatar">
+                        {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
+                    </div>
                 </div>
 
                 {activeTab === 'Dashboard' && renderDashboardOverview()}

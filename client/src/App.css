@@ -762,11 +762,12 @@
   flex: 1;
   margin-left: 260px;
   /* INCREASE THE TOP PADDING HERE */
-  padding: 100px 40px 40px 40px; 
+  padding: 40px 40px 40px 40px; 
   max-width: 1400px;
 }
 
 .dashboard-header {
+  padding-top: 24px; /* Keeps a clean spacing internally just for the content header */
   margin-bottom: 32px;
 }
 
