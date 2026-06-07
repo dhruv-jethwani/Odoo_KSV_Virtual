@@ -178,7 +178,7 @@ export default function Home() {
     return (
         <div className="dashboard-layout">
             {/* Mobile Header */}
-            <div className="mobile-header flex-between w-100">
+            <div className="mobile-header w-100">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <button className="hamburger" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
                         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
