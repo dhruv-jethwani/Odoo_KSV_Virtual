@@ -2374,22 +2374,16 @@ tr:hover td {
    ========================================= */
 
 /* Top Right User Profile Corner */
-.user-profile-corner {
+.persistent-user-meta {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  background: white;
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(15, 23, 42, 0.06);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
-  
-  /* ADD THESE 4 LINES */
+  flex-direction: column;
+  text-align: right;
   position: fixed;
-  top: 24px;
+  top: 32px;
   right: 40px;
   z-index: 100;
 }
+
 .user-meta {
   display: flex;
   flex-direction: column;
