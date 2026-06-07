@@ -76,22 +76,10 @@ export default function Home() {
 
         return (
             <div className="animate-fade-in">
-                {/* Header with Top Right Profile */}
                 <header className="dashboard-header flex-between align-center">
                     <div>
                         <h1>Dashboard</h1>
                         <p>Welcome back, {currentUser?.firstName || currentUser?.username}. Here is your Today's Overview.</p>
-                    </div>
-                    
-                    {/* Populated User Profile block mapped seamlessly to your global CSS stylesheet variables */}
-                    <div className="user-profile-corner">
-                        <div className="user-meta">
-                            <span className="user-name">{currentUser?.username}</span>
-                            <span className="user-role">{currentUser?.role}</span>
-                        </div>
-                        <div className="user-avatar">
-                            {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
-                        </div>
                     </div>
                 </header>
                 
@@ -237,6 +225,18 @@ export default function Home() {
 
             {/* Dynamic Main Content Area */}
             <main className="dashboard-main">
+                
+                {/* Persistent Desktop Profile Widget - Now positioned fixed at the top right */}
+                <div className="user-profile-corner animate-fade-in">
+                    <div className="user-meta">
+                        <span className="user-name">{currentUser?.username}</span>
+                        <span className="user-role">{currentUser?.role}</span>
+                    </div>
+                    <div className="user-avatar">
+                        {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                </div>
+
                 {activeTab === 'Dashboard' && renderDashboardOverview()}
                 {activeTab === 'Vendors' && <Vendors />}
                 {activeTab === 'RFQs' && <Rfqs />}
