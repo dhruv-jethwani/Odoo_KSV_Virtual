@@ -226,14 +226,16 @@ export default function Home() {
             {/* Dynamic Main Content Area */}
             <main className="dashboard-main">
                 
-                {/* Persistent Desktop Profile Widget - Now positioned fixed at the top right */}
-                <div className="user-profile-corner animate-fade-in">
-                    <div className="user-meta">
-                        <span className="user-name">{currentUser?.username}</span>
-                        <span className="user-role">{currentUser?.role}</span>
-                    </div>
-                    <div className="user-avatar">
-                        {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
+                {/* Dedicated Top Bar for Profile - Pushes everything down cleanly */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
+                    <div className="user-profile-corner animate-fade-in">
+                        <div className="user-meta">
+                            <span className="user-name">{currentUser?.username}</span>
+                            <span className="user-role">{currentUser?.role}</span>
+                        </div>
+                        <div className="user-avatar">
+                            {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
+                        </div>
                     </div>
                 </div>
 
