@@ -205,7 +205,6 @@ export default function Home() {
                         {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
                     </div>
                     <div className="sidebar-user-meta">
-                        <span className="sidebar-user-name">{currentUser?.username || 'Loading...'}</span>
                         <span className="sidebar-user-role">{currentUser?.role || ''}</span>
                     </div>
                 </div>

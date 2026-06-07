@@ -2376,129 +2376,94 @@ tr:hover td {
    DASHBOARD REFINEMENTS & AVATAR (SCREEN 3)
    ========================================= */
 
-/* --- Sci-Fi HUD Sidebar Profile --- */
+/* --- Elegant Sidebar Profile --- */
 .sidebar-profile {
   padding: 16px;
   margin: 0 16px 24px 16px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
-  border: 1px solid #38bdf8;
-  box-shadow: 
-    0 0 15px rgba(56, 189, 248, 0.2), 
-    inset 0 0 20px rgba(56, 189, 248, 0.15);
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.08);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   position: relative;
   overflow: hidden;
-  cursor: default;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Holographic Blueprint Grid Background */
+.sidebar-profile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 35px -5px rgba(37, 99, 235, 0.12);
+}
+
+/* Stylish Animated Top Accent Line */
 .sidebar-profile::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(56, 189, 248, 0.15) 1px, transparent 1px);
-  background-size: 10px 10px;
-  opacity: 0.6;
-  pointer-events: none;
+  top: 0; 
+  left: 0; 
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb, #60a5fa, #2563eb);
+  background-size: 200% 100%;
+  animation: shimmer-border 3s infinite linear;
 }
 
-/* Animated HUD Scanning Laser */
-.sidebar-profile::after {
-  content: '';
-  position: absolute;
-  top: -10%;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8, 0 0 15px #38bdf8;
-  animation: hud-scan 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  pointer-events: none;
-  opacity: 0.8;
+@keyframes shimmer-border {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
-@keyframes hud-scan {
-  0% { top: -10%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 110%; opacity: 0; }
-}
-
-/* Chamfered Tech Avatar */
+/* Modern 'Squircle' Avatar */
 .sidebar-avatar {
-  width: 48px;
-  height: 48px;
-  clip-path: polygon(20% 0, 100% 0, 100% 80%, 80% 100%, 0 100%, 0 20%);
-  background: rgba(56, 189, 248, 0.1);
-  border: 2px solid #38bdf8;
-  color: #7dd3fc;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px; 
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #2563eb;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  font-weight: 900;
-  font-family: var(--mono);
+  font-size: 1.4rem;
+  font-weight: 800;
   flex-shrink: 0;
-  z-index: 2;
-  animation: pulse-core 2s infinite alternate;
-}
-
-@keyframes pulse-core {
-  from { box-shadow: inset 0 0 5px rgba(56, 189, 248, 0.3); }
-  to { box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.9); }
 }
 
 .sidebar-user-meta {
   display: flex;
   flex-direction: column;
-  z-index: 2;
   flex: 1;
 }
 
 .sidebar-user-name {
   font-weight: 800;
-  color: #f8fafc;
-  font-size: 1rem;
-  letter-spacing: 0.05em;
-  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+  color: #0f172a;
+  font-size: 0.95rem;
+  line-height: 1.2;
   margin-bottom: 6px;
 }
 
-/* The Fix: Wrapping Sci-Fi Data Badge */
+/* Clean, Wrapping Role Badge */
 .sidebar-user-role {
-  color: #bae6fd;
-  font-family: var(--mono);
+  color: #1d4ed8;
   font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  
-  /* This prevents the cut-off and lets long titles stack cleanly */
-  white-space: normal;
-  word-wrap: break-word;
+  letter-spacing: 0.06em;
+  font-weight: 800;
+  background: #eff6ff;
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  width: fit-content;
   line-height: 1.4;
   
-  /* Cyberpunk Badge Styling */
-  background: rgba(15, 23, 42, 0.8);
-  border-left: 3px solid #38bdf8;
-  padding: 4px 8px;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.1);
-  position: relative;
-}
-
-/* Tech Accent Node on Badge */
-.sidebar-user-role::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 4px;
-  height: 4px;
-  background: #38bdf8;
+  /* This guarantees long titles wrap safely without slicing */
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .user-meta {
