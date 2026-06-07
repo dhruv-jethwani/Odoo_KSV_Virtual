@@ -198,6 +198,18 @@ export default function Home() {
                 <div className="sidebar-brand">
                     <h2>VendorBridge</h2>
                 </div>
+
+                {/* --- NEW FANCY SIDEBAR PROFILE --- */}
+                <div className="sidebar-profile animate-fade-in">
+                    <div className="sidebar-avatar">
+                        {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                    <div className="sidebar-user-meta">
+                        <span className="sidebar-user-name">{currentUser?.username || 'Loading...'}</span>
+                        <span className="sidebar-user-role">{currentUser?.role || ''}</span>
+                    </div>
+                </div>
+
                 <nav className="sidebar-nav">
                     <ul>
                         {navItems.map((item, index) => (
@@ -225,19 +237,7 @@ export default function Home() {
 
             {/* Dynamic Main Content Area */}
             <main className="dashboard-main">
-                
-                {/* Dedicated Top Bar for Profile - Pushes everything down cleanly */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
-                    <div className="user-profile-corner animate-fade-in">
-                        <div className="user-meta">
-                            <span className="user-name">{currentUser?.username}</span>
-                            <span className="user-role">{currentUser?.role}</span>
-                        </div>
-                        <div className="user-avatar">
-                            {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
-                        </div>
-                    </div>
-                </div>
+                {/* The old top bar has been completely removed so headers go back to normal! */}
 
                 {activeTab === 'Dashboard' && renderDashboardOverview()}
                 {activeTab === 'Vendors' && <Vendors />}
