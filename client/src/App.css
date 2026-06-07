@@ -639,7 +639,9 @@
 
 /* --- Mobile Header --- */
 .mobile-header {
-  display: none;
+  /* CHANGE THIS from display: flex to display: none */
+  display: none; 
+  
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
