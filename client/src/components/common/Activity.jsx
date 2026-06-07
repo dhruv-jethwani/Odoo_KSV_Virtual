@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import API from '../../api';
 
 export default function Activity() {
     const [activities, setActivities] = useState([])
@@ -9,10 +9,10 @@ export default function Activity() {
     const fetchActivities = async () => {
         try {
             // First, optionally seed the DB if it's empty so you have immediate demo data
-            await axios.post('/api/activity/seed').catch(() => {});
+            await API.post('/api/activity/seed').catch(() => {});
             
             // Fetch live data
-            const response = await axios.get('/api/activity/')
+            const response = await API.get('/api/activity/')
             setActivities(response.data)
         } catch (error) {
             console.error("Error fetching activities:", error)

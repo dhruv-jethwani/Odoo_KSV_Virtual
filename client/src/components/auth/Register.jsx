@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { z } from 'zod'
-import axios from 'axios'
+import API from '../../api';
 import '../../App.css'
 
 const registerSchema = z.object({
@@ -99,7 +99,7 @@ function Register() {
 		setIsSubmitting(true)
 
 		try {
-			const response = await axios.post('/api/auth/register', form)
+			const response = await API.post('/api/auth/register', form)
 			showToast(response.data.message, 'success')
 			setForm(initialForm)
 			setShowPassword(false)

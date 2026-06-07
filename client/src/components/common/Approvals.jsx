@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import API from '../../api';
 
 export default function Approvals() {
     const [view, setView] = useState('list') // 'list' or 'detail'
@@ -12,7 +12,7 @@ export default function Approvals() {
     // Fetch live pending approvals from backend
     const fetchApprovals = async () => {
         try {
-            const response = await axios.get('/api/approval/')
+            const response = await API.get('/api/approval/')
             setApprovals(response.data)
         } catch (error) {
             console.error("Error fetching approvals:", error)
@@ -40,7 +40,7 @@ export default function Approvals() {
         setIsSubmitting(true)
 
         try {
-            const response = await axios.post(`/api/approval/${selectedApproval.bid_id}/action`, {
+            const response = await API.post(`/api/approval/${selectedApproval.bid_id}/action`, {
                 action: actionType,
                 remarks: remarks
             })

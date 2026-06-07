@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import API from '../../api';
 
 export default function Rfqs() {
     const [view, setView] = useState('list') 
@@ -26,8 +26,8 @@ export default function Rfqs() {
     const fetchRfqsAndVendors = async () => {
         try {
             const [rfqRes, vendorRes] = await Promise.all([
-                axios.get('/api/rfq/'),
-                axios.get('/api/vendor/')
+                API.get('/api/rfq/'),
+                API.get('/api/vendor/')
             ])
             setRfqs(rfqRes.data)
             setVendors(vendorRes.data.filter(v => v.complianceStatus === 'Active'))
@@ -45,7 +45,7 @@ export default function Rfqs() {
         setIsSubmitting(true)
 
         try {
-            await axios.post('/api/rfq/add', newRfq)
+            await API.post('/api/rfq/add', newRfq)
             fetchRfqsAndVendors()
             setView('list')
             setNewRfq({ title: '', category: '', deadline: '', description: '', itemName: '', quantity: '', invitedVendors: [] })
@@ -71,7 +71,7 @@ export default function Rfqs() {
         setQuotesModalOpen(true)
         setLoadingQuotes(true)
         try {
-            const res = await axios.get('/api/bid/')
+            const res = await API.get('/api/bid/')
             // Filter quotes that match this specific RFQ
             const related = res.data.filter(b => b.rfq_id === rfqId)
             setSelectedRfqQuotes(related)

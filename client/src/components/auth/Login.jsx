@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { z } from 'zod'
-import axios from 'axios'
+import API from '../../api';
 import '../../App.css'
 
 const loginSchema = z.object({
@@ -72,7 +72,7 @@ function Login() {
 		setIsSubmitting(true)
 
 		try {
-			const response = await axios.post('/api/auth/login', form)
+			const response = await API.post('/api/auth/login', form)
 			showToast(response.data.message, 'success')
 			setForm(initialForm)
 			setShowPassword(false)

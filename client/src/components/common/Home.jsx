@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import API from '../../api';
 import Vendors from './Vendors'
 import Rfqs from './Rfqs'
 import Quotations from './Quotations'
@@ -31,17 +31,17 @@ export default function Home() {
         const fetchDashboardData = async () => {
             try {
                 // 1. Fetch Current Logged-in User
-                const userRes = await axios.get('/api/auth/me', {
+                const userRes = await API.get('/api/auth/me', {
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 setCurrentUser(userRes.data)
 
                 // 2. Fetch High-Level Reports/Stats
-                const statsRes = await axios.get('/api/report/')
+                const statsRes = await API.get('/api/report/')
                 setDashboardStats(statsRes.data)
 
                 // 3. Fetch Recent Purchase Orders (Take top 4)
-                const poRes = await axios.get('/api/po/')
+                const poRes = await API.get('/api/po/')
                 setRecentPOs(poRes.data.slice(0, 4))
 
             } catch (error) {

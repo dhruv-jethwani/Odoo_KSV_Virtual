@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import API from '../../api';
 
 export default function Quotations() {
     const [view, setView] = useState('list') 
@@ -18,7 +18,7 @@ export default function Quotations() {
     // Fetch live data from backend
     const fetchQuotations = async () => {
         try {
-            const response = await axios.get('/api/bid/')
+            const response = await API.get('/api/bid/')
             setQuotations(response.data)
         } catch (error) {
             console.error("Error fetching quotes:", error)
@@ -48,7 +48,7 @@ export default function Quotations() {
         setIsSubmitting(true)
         
         try {
-            await axios.post('/api/bid/add', {
+            await API.post('/api/bid/add', {
                 rfq_id: rfqId,
                 amount: grandTotal,
                 delivery: deliveryTime,
@@ -68,7 +68,7 @@ export default function Quotations() {
 
     const handleCompareAction = async (quote, action) => {
         try {
-            await axios.patch(`/api/bid/${quote.raw_id}/status`, {
+            await API.patch(`/api/bid/${quote.raw_id}/status`, {
                 status: action
             })
             fetchQuotations()

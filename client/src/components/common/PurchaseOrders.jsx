@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import API from '../../api';
 
 export default function PurchaseOrders() {
     const [view, setView] = useState('list') // 'list' or 'detail'
@@ -11,7 +11,7 @@ export default function PurchaseOrders() {
     // Fetch live POs from backend
     const fetchPOs = async () => {
         try {
-            const response = await axios.get('/api/po/')
+            const response = await API.get('/api/po/')
             setPurchaseOrders(response.data)
         } catch (error) {
             console.error("Error fetching POs:", error)
@@ -30,7 +30,7 @@ export default function PurchaseOrders() {
     const handleGenerateInvoice = async () => {
         setIsGenerating(true)
         try {
-            const response = await axios.post(`/api/po/${selectedPO.raw_id}/invoice`)
+            const response = await API.post(`/api/po/${selectedPO.raw_id}/invoice`)
             alert(response.data.message)
             fetchPOs() // Refresh the list
             setView('list')

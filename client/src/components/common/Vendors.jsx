@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import API from '../../api';
 import '../../App.css'
 
 export default function Vendors() {
@@ -26,7 +26,7 @@ export default function Vendors() {
     // Fetch live vendors from backend
     const fetchVendors = async () => {
         try {
-            const response = await axios.get('/api/vendor/')
+            const response = await API.get('/api/vendor/')
             setVendors(response.data)
         } catch (error) {
             console.error("Error fetching vendors:", error)
@@ -46,7 +46,7 @@ export default function Vendors() {
         setIsSubmitting(true)
 
         try {
-            const response = await axios.post('/api/vendor/add', formData)
+            const response = await API.post('/api/vendor/add', formData)
             fetchVendors() // Reload table rows
             setNewCredentials(response.data.generated_credentials) // Fire success popup
             
