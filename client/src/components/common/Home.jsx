@@ -82,8 +82,19 @@ export default function Home() {
                         <h1>Dashboard</h1>
                         <p>Welcome back, {currentUser?.firstName || currentUser?.username}. Here is your Today's Overview.</p>
                     </div>
-
+                    
+                    {/* Populated User Profile block mapped seamlessly to your global CSS stylesheet variables */}
+                    <div className="user-profile-corner">
+                        <div className="user-meta">
+                            <span className="user-name">{currentUser?.username}</span>
+                            <span className="user-role">{currentUser?.role}</span>
+                        </div>
+                        <div className="user-avatar">
+                            {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                    </div>
                 </header>
+                
                 {/* Top Dynamic Stats Grid */}
                 <section className="stats-grid">
                     {dashboardStats?.stats?.map((stat, index) => (
