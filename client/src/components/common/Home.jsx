@@ -187,6 +187,10 @@ export default function Home() {
                     </button>
                     <span className="logo-text">VendorBridge</span>
                 </div>
+                {/* Mobile User Avatar */}
+                <div className="user-avatar mobile-avatar">
+                    {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
+                </div>
             </div>
 
             {/* Sidebar Navigation */}
@@ -222,10 +226,12 @@ export default function Home() {
             {/* Dynamic Main Content Area */}
             <main className="dashboard-main">
                 
-                {/* Persistent Desktop Profile Text Only - Floating top right */}
-                <div className="persistent-user-meta animate-fade-in">
-                    <span className="user-name">{currentUser?.username}</span>
-                    <span className="user-role">{currentUser?.role}</span>
+                {/* Persistent Desktop Profile Widget - Now positioned fixed at the top right */}
+                <div className="user-profile-corner animate-fade-in">
+                    <div className="user-meta">
+                        <span className="user-name">{currentUser?.username}</span>
+                        <span className="user-role">{currentUser?.role}</span>
+                    </div>
                 </div>
 
                 {activeTab === 'Dashboard' && renderDashboardOverview()}
